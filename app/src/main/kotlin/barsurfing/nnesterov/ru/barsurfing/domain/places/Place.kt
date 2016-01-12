@@ -1,4 +1,4 @@
-package barsurfing.nnesterov.ru.barsurfing.domain
+package barsurfing.nnesterov.ru.barsurfing.domain.places
 
 
 data class Place(val id: String,
