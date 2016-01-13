@@ -42,15 +42,15 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
     }
 
     override fun onMapFullReady() {
+        view?.showLoading()
         subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
-
         subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
     }
 
     private inner class LocationSubscriber : Subscriber<Location>() {
         override fun onNext(t: Location?) {
             val location = t ?: return;
-            view?.showCurrentLocation(t.latitude, t.longitude);
+            view?.showCurrentLocation(location.latitude, location.longitude);
         }
 
         override fun onError(e: Throwable?) {
@@ -68,6 +68,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
         }
 
         override fun onError(e: Throwable) {
+            view?.showError(e);
         }
 
         override fun onCompleted() {
