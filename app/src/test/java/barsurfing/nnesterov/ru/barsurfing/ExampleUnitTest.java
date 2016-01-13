@@ -1,4 +1,4 @@
-package barsurfing.nnesterov.ru.barsurfing;
+package ru.nnesterov.barsurfing;
 
 import org.junit.Test;
 
