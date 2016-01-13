@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
@@ -30,19 +31,33 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         presenter?.onCreate(this, savedInstanceState)
     }
 
+    override fun onPause() {
+        presenter?.onPause()
+    }
+
+    override fun onStop() {
+        presenter?.onStop()
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map?.setMyLocationEnabled(true);
+        map?.isMyLocationEnabled = true;
         presenter?.onMapFullReady()
     }
 
     override fun showPlaces(places: List<Place>) {
+        val boundsBuilder = LatLngBounds.Builder();
+
         places.forEach {
+            val position = LatLng(it.latitude, it.longitude)
             val markerOptions = MarkerOptions()
-                    .position(LatLng(it.latitude, it.longitude))
-            map?.addMarker(markerOptions)
+                    .position(position)
+                    .title(it.name)
+            val marker = map?.addMarker(markerOptions)
+            boundsBuilder.include(position)
         }
+        val cameraUpdate = CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 20)
+        map?.animateCamera(cameraUpdate)
     }
 
     override fun showLoading() {
@@ -56,8 +71,6 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     }
 
     override fun showCurrentLocation(latitude: Double, longitude: Double) {
-        Toast.makeText(this, "" + latitude + "  " + longitude, Toast.LENGTH_SHORT).show()
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), defaultZoomLevel)
-        map?.animateCamera(cameraUpdate)
+
     }
 }

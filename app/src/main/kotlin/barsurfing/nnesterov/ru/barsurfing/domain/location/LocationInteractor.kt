@@ -1,9 +1,8 @@
-package barsurfing.nnesterov.ru.barsurfing.domain
+package barsurfing.nnesterov.ru.barsurfing.domain.location
 
 import android.content.Context
 import android.location.Location
 import barsurfing.nnesterov.ru.barsurfing.data.location.LocationProviderImpl
-import barsurfing.nnesterov.ru.barsurfing.domain.location.LocationProvider
 import rx.Subscriber
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers

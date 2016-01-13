@@ -3,8 +3,8 @@ package barsurfing.nnesterov.ru.barsurfing.view
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
-import barsurfing.nnesterov.ru.barsurfing.domain.BarListInteractor
-import barsurfing.nnesterov.ru.barsurfing.domain.LocationInteractor
+import barsurfing.nnesterov.ru.barsurfing.domain.location.LocationInteractor
+import barsurfing.nnesterov.ru.barsurfing.domain.places.BarListInteractor
 import barsurfing.nnesterov.ru.barsurfing.domain.places.Place
 import rx.Subscriber
 import rx.Subscription
@@ -32,6 +32,10 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
             it.unsubscribe()
         }
         subscriptions.clear();
+    }
+
+    override fun onPause() {
+
     }
 
     override fun onDestroy() {
