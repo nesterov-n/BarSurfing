@@ -5,9 +5,7 @@ interface MainActivityPresenter {
 
     fun onCreate(view: MainView);
 
-    fun onResume();
-
-    fun onPause();
+    fun onStop();
 
     fun onDestroy();
 

@@ -6,4 +6,6 @@ import rx.Observable
 
 interface LocationProvider {
     fun getLastKnownLocation(): Observable<Location>
+
+    fun getUpdatableLocation(): Observable<Location>
 }
