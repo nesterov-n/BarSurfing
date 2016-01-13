@@ -2,10 +2,13 @@ package barsurfing.nnesterov.ru.barsurfing.view
 
 import android.content.Context
 import android.location.Location
+import android.os.Bundle
 import barsurfing.nnesterov.ru.barsurfing.domain.BarListInteractor
 import barsurfing.nnesterov.ru.barsurfing.domain.LocationInteractor
+import barsurfing.nnesterov.ru.barsurfing.domain.places.Place
 import rx.Subscriber
 import rx.Subscription
+import java.util.*
 
 
 class MainActivityPresenterImpl(private val  context: Context) : MainActivityPresenter {
@@ -13,27 +16,31 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
     private val barListInteractor: BarListInteractor;
     private val locationInteractor: LocationInteractor;
     private var view: MainView? = null;
-    private var subscription : Subscription? = null;
+    private val subscriptions = ArrayList<Subscription>()
 
     init {
         barListInteractor = BarListInteractor(context)
         locationInteractor = LocationInteractor(context)
     }
 
-    override fun onCreate(view: MainView) {
+    override fun onCreate(view: MainView, savedState: Bundle?) {
         this.view = view
     }
 
-
     override fun onStop() {
-        subscription?.unsubscribe();
+        subscriptions.forEach {
+            it.unsubscribe()
+        }
+        subscriptions.clear();
     }
 
     override fun onDestroy() {
     }
 
     override fun onMapFullReady() {
-        subscription = locationInteractor.subscribeToLocation(LocationSubscriber());
+        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
+
+        subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
     }
 
     private inner class LocationSubscriber : Subscriber<Location>() {
@@ -48,6 +55,19 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
         override fun onCompleted() {
             unsubscribe();
+        }
+    }
+
+    private inner class PlacesSubscriber : Subscriber<List<Place>>() {
+        override fun onNext(places: List<Place>) {
+            view?.showPlaces(places)
+        }
+
+        override fun onError(e: Throwable) {
+        }
+
+        override fun onCompleted() {
+            unsubscribe()
         }
     }
 }

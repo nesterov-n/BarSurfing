@@ -5,9 +5,11 @@ import android.support.v4.app.FragmentActivity
 import android.widget.Toast
 import barsurfing.nnesterov.ru.barsurfing.R
 import barsurfing.nnesterov.ru.barsurfing.domain.places.Place
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
@@ -25,7 +27,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         mapFragment.getMapAsync(this)
 
         presenter = MainActivityPresenterImpl(this)
-        presenter?.onCreate(this)
+        presenter?.onCreate(this, savedInstanceState)
     }
 
 
@@ -36,6 +38,11 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     }
 
     override fun showPlaces(places: List<Place>) {
+        places.forEach {
+            val markerOptions = MarkerOptions()
+                    .position(LatLng(it.latitude, it.longitude))
+            map?.addMarker(markerOptions)
+        }
     }
 
     override fun showLoading() {

@@ -12,7 +12,7 @@ import rx.schedulers.Schedulers
 class LocationInteractor(private val locationProvider: LocationProvider) {
     constructor(context: Context) : this(LocationProviderImpl(context));
 
-    public fun subscribeToLocation(subscriber: Subscriber<Location>): Subscription? {
+    public fun subscribeToLocation(subscriber: Subscriber<Location>): Subscription {
         return locationProvider.getUpdatableLocation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

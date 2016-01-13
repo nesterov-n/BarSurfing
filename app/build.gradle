@@ -38,9 +38,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
-    compile ('com.octo.android.robospice:robospice:1.4.14') {
-        exclude group: 'org.apache.commons', module: 'commons-io'
-    }
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxkotlin:0.30.1'

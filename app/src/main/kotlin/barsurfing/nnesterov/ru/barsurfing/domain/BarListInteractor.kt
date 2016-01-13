@@ -19,7 +19,7 @@ class BarListInteractor(private val placeProvider: PlaceProvider,
     val SEARCH_RADIUS_IN_METERS = 3000;
 
     // TODO: Add DI
-    constructor(context: Context) : this(PlaceProviderImpl(), LocationProviderImpl(context))
+    constructor(context: Context) : this(PlaceProviderImpl(context), LocationProviderImpl(context))
 
 
     public fun getNearbyBars(subscriber: Subscriber<List<Place>>): Subscription {
