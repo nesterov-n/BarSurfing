@@ -7,6 +7,7 @@ import java.util.*
 
 internal object RouteMapper : Func1<RouteDto, Route> {
     override fun call(dto: RouteDto?): Route? {
-        return Route(PolyUtil.decode(dto?.polyline?.points ?: "") ?: Collections.emptyList())
+        val encodedRoute = dto?.polyline?.points ?: ""
+        return Route(PolyUtil.decode(encodedRoute) ?: Collections.emptyList())
     }
 }

@@ -64,7 +64,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
     private inner class PlacesSubscriber : Subscriber<RoutedPlaces>() {
         override fun onNext(places: RoutedPlaces) {
-            view?.showPlaces(places.places)
+            view?.showPlaces(places)
         }
 
         override fun onError(e: Throwable) {

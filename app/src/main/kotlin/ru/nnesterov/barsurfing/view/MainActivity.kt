@@ -16,13 +16,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import ru.nnesterov.barsurfing.R
 import ru.nnesterov.barsurfing.domain.places.Place
+import ru.nnesterov.barsurfing.domain.places.Route
+import ru.nnesterov.barsurfing.domain.places.RoutedPlaces
 
 class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
 
     private var map: GoogleMap? = null
     private val markerBoundPadding = 100;
     private lateinit var progressBar: ProgressBar
-    private var presenter : MainActivityPresenter? = null;
+    private var presenter: MainActivityPresenter? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +59,14 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         presenter?.onMapFullReady()
     }
 
-    override fun showPlaces(places: List<Place>) {
+    override fun showPlaces(places: RoutedPlaces) {
         progressBar.visibility = View.INVISIBLE
-        val boundsBuilder = LatLngBounds.Builder()
-        val polyline = PolylineOptions()
+        addMarkers(places.places)
+        addPolyline(places.route)
+    }
 
+    private fun addMarkers(places: List<Place>) {
+        val boundsBuilder = LatLngBounds.Builder()
         places.forEach {
             val position = LatLng(it.latitude, it.longitude)
             val markerOptions = MarkerOptions()
@@ -69,13 +74,17 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
                     .title(it.name)
             map?.addMarker(markerOptions)
             boundsBuilder.include(position)
-
-            polyline.add(position)
         }
-
-        map?.addPolyline(polyline)
         val cameraUpdate = CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), markerBoundPadding)
         map?.animateCamera(cameraUpdate)
+    }
+
+    private fun addPolyline(route: Route) {
+        val polyline = PolylineOptions()
+                .addAll(route.points)
+                .color(R.color.colorPrimaryDark)
+                .width(20.0f)
+        map?.addPolyline(polyline)
     }
 
     override fun showLoading() {
