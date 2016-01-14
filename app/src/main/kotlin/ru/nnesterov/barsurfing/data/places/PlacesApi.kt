@@ -11,13 +11,12 @@ internal interface PlacesApi {
                   @Query("types") types: String,
                   @Query("rankby") rankby: String,
                   @Query("opennow") openNow: Boolean,
-                  @Query("key") key: String): Observable<PlacesResponse>
+                  @Query("key") key: String): Observable<PlacesResponseDto>
 
-    @GET("/place/directions/json")
+    @GET("/directions/json")
     fun getRoute(@Query("origin") origin: String,
                  @Query("destination") destination: String,
-                 @Query("via") via: String,
+                 @Query("waypoints") via: String,
                  @Query("mode") mode: String,
-                 @Query("opennow") openNow: Boolean,
-                 @Query("key") key: String): Observable<PlacesResponse>
+                 @Query("key") key: String): Observable<RouteResponseDto>
 }

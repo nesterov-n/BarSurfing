@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 
-internal class PlacesResponse {
+internal class PlacesResponseDto {
 
 
     @SerializedName("results")
     @Expose
-    var results: List<Result> = ArrayList()
+    var results: List<PlaceResultDto> = ArrayList()
 
     @SerializedName("status")
     @Expose

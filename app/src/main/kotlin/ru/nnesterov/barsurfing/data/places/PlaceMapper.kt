@@ -5,9 +5,9 @@ import rx.functions.Func1
 import java.util.*
 
 
-internal object PlaceMapper : Func1<PlacesResponse, List<Place>> {
+internal object PlaceMapper : Func1<PlacesResponseDto, List<Place>> {
 
-    public override fun call(response: PlacesResponse): List<Place> {
+    public override fun call(response: PlacesResponseDto): List<Place> {
         val result = ArrayList<Place>()
         response.results.forEach {
             result.add(Place(it.placeId ?: "",

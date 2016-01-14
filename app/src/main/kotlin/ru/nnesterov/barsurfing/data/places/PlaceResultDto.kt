@@ -3,11 +3,11 @@ package ru.nnesterov.barsurfing.data.places
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-internal class Result {
+internal class PlaceResultDto {
 
     @SerializedName("geometry")
     @Expose
-    var geometry: Geometry? = null
+    var geometry: GeometryDto? = null
 
     @SerializedName("icon")
     @Expose

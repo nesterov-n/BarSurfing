@@ -5,7 +5,7 @@ import android.location.Location
 import android.os.Bundle
 import ru.nnesterov.barsurfing.domain.location.LocationInteractor
 import ru.nnesterov.barsurfing.domain.places.BarListInteractor
-import ru.nnesterov.barsurfing.domain.places.Place
+import ru.nnesterov.barsurfing.domain.places.RoutedPlaces
 import rx.Subscriber
 import rx.Subscription
 import java.util.*
@@ -62,9 +62,9 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
         }
     }
 
-    private inner class PlacesSubscriber : Subscriber<List<Place>>() {
-        override fun onNext(places: List<Place>) {
-            view?.showPlaces(places)
+    private inner class PlacesSubscriber : Subscriber<RoutedPlaces>() {
+        override fun onNext(places: RoutedPlaces) {
+            view?.showPlaces(places.places)
         }
 
         override fun onError(e: Throwable) {

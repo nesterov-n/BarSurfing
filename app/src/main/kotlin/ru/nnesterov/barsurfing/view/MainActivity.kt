@@ -13,6 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import ru.nnesterov.barsurfing.R
 import ru.nnesterov.barsurfing.domain.places.Place
 
@@ -59,6 +60,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     override fun showPlaces(places: List<Place>) {
         progressBar.visibility = View.INVISIBLE
         val boundsBuilder = LatLngBounds.Builder()
+        val polyline = PolylineOptions()
 
         places.forEach {
             val position = LatLng(it.latitude, it.longitude)
@@ -67,7 +69,11 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
                     .title(it.name)
             map?.addMarker(markerOptions)
             boundsBuilder.include(position)
+
+            polyline.add(position)
         }
+
+        map?.addPolyline(polyline)
         val cameraUpdate = CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), markerBoundPadding)
         map?.animateCamera(cameraUpdate)
     }
@@ -79,6 +85,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     override fun showError(ex: Throwable?) {
         progressBar.visibility = View.INVISIBLE
         Toast.makeText(this, ex?.toString() ?: "Unknown error", Toast.LENGTH_SHORT).show()
+        Log.e("MainActivity", "", ex)
     }
 
     override fun clear() {
