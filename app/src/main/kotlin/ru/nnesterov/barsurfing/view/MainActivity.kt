@@ -24,6 +24,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     private var map: GoogleMap? = null
     private val markerBoundPadding = 100;
     private lateinit var progressBar: ProgressBar
+    private lateinit var aboutOverlay: View
     private var presenter: MainActivityPresenter? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +34,15 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        progressBar = findViewById(R.id.progress_bar) as ProgressBar
+        aboutOverlay = findViewById(R.id.overlay_view) as View
+
         presenter = MainActivityPresenterImpl(this)
         presenter?.onCreate(this, savedInstanceState)
-        progressBar = findViewById(R.id.progress_bar) as ProgressBar
+
+        aboutOverlay.setOnClickListener {
+            presenter?.onAboutOverlayClicked()
+        }
     }
 
     override fun onResume() {
@@ -74,6 +81,14 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         progressBar.visibility = View.INVISIBLE
         addMarkers(places.places)
         addPolyline(places.route)
+    }
+
+    override fun showAboutOverlay() {
+        aboutOverlay.visibility = View.VISIBLE
+    }
+
+    override fun hideAboutOverlay() {
+        aboutOverlay.visibility = View.INVISIBLE
     }
 
     private fun addMarkers(places: List<Place>) {

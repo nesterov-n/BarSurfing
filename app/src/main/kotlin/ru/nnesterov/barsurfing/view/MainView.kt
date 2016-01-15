@@ -5,13 +5,17 @@ import ru.nnesterov.barsurfing.domain.places.RoutedPlaces
 
 interface MainView {
 
-    fun showCurrentLocation(latitude : Double, longitude : Double);
+    fun showCurrentLocation(latitude: Double, longitude: Double)
 
-    fun showPlaces(places: RoutedPlaces);
+    fun showPlaces(places: RoutedPlaces)
 
-    fun showLoading();
+    fun showLoading()
 
-    fun showError(ex: Throwable?);
+    fun showError(ex: Throwable?)
 
-    fun clear();
+    fun showAboutOverlay()
+
+    fun clear()
+
+    fun hideAboutOverlay()
 }

@@ -32,6 +32,9 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
         if (wrapper != null) {
             routedPLaces = wrapper.toRoutedPlaces()
         }
+        if (savedState == null) {
+            view.showAboutOverlay()
+        }
     }
 
     override fun onStop() {
@@ -56,6 +59,10 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
         } else {
             view?.showPlaces(routedPLaces!!)
         }
+    }
+
+    override fun onAboutOverlayClicked() {
+        view?.hideAboutOverlay()
     }
 
     override fun onSaveinstanceState(state: Bundle) {

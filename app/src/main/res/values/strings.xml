@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BarSurfing</string>
     <string name="title_activity_main">Map</string>
+    <string name="about_text">1. Ten bars\n2.One bar – one shot\n3. Try to survive </string>
 </resources>

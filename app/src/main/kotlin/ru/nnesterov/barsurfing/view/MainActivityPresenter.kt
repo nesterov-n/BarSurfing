@@ -5,16 +5,17 @@ import android.os.Bundle
 
 interface MainActivityPresenter {
 
-    fun onCreate(view: MainView, savedState: Bundle?);
+    fun onCreate(view: MainView, savedState: Bundle?)
 
-    fun onPause();
+    fun onPause()
 
-    fun onStop();
+    fun onStop()
 
-    fun onDestroy();
+    fun onDestroy()
 
-    fun onMapFullReady();
+    fun onSaveinstanceState(state: Bundle)
 
-    fun onSaveinstanceState(state: Bundle);
+    fun onMapFullReady()
 
+    fun onAboutOverlayClicked()
 }
