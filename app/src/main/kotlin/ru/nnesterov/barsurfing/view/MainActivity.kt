@@ -38,6 +38,10 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         progressBar = findViewById(R.id.progress_bar) as ProgressBar
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun onPause() {
         super.onPause()
         presenter?.onPause()
@@ -53,10 +57,17 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         presenter?.onDestroy()
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        presenter?.onSaveinstanceState(outState!!)
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map?.isMyLocationEnabled = true
-        presenter?.onMapFullReady()
+        map?.setOnMapLoadedCallback {
+            presenter?.onMapFullReady()
+        }
     }
 
     override fun showPlaces(places: RoutedPlaces) {

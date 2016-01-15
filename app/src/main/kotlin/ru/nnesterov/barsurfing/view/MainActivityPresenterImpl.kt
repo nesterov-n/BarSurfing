@@ -13,10 +13,13 @@ import java.util.*
 
 class MainActivityPresenterImpl(private val  context: Context) : MainActivityPresenter {
 
+    private val ROUTE_KEY = "route-key"
+
     private val barListInteractor: BarListInteractor;
     private val locationInteractor: LocationInteractor;
     private var view: MainView? = null;
     private val subscriptions = ArrayList<Subscription>()
+    private var routedPLaces: RoutedPlaces? = null
 
     init {
         barListInteractor = BarListInteractor(context)
@@ -25,6 +28,10 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
     override fun onCreate(view: MainView, savedState: Bundle?) {
         this.view = view
+        val wrapper = savedState?.getSerializable(ROUTE_KEY) as RoutedPlacesWrapper?
+        if (wrapper != null) {
+            routedPLaces = wrapper.toRoutedPlaces()
+        }
     }
 
     override fun onStop() {
@@ -43,8 +50,19 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
     override fun onMapFullReady() {
         view?.showLoading()
-        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
-        subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
+        if (routedPLaces == null) {
+            subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
+            subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
+        } else {
+            view?.showPlaces(routedPLaces!!)
+        }
+    }
+
+    override fun onSaveinstanceState(state: Bundle) {
+        if (routedPLaces != null) {
+            val serializablaeWrapper = RoutedPlacesWrapper(routedPLaces!!)
+            state.putSerializable(ROUTE_KEY, serializablaeWrapper)
+        }
     }
 
     private inner class LocationSubscriber : Subscriber<Location>() {
@@ -64,6 +82,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
     private inner class PlacesSubscriber : Subscriber<RoutedPlaces>() {
         override fun onNext(places: RoutedPlaces) {
+            routedPLaces = places
             view?.showPlaces(places)
         }
 

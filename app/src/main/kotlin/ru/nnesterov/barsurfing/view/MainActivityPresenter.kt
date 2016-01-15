@@ -15,4 +15,6 @@ interface MainActivityPresenter {
 
     fun onMapFullReady();
 
+    fun onSaveinstanceState(state: Bundle);
+
 }
