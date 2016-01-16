@@ -64,7 +64,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
     private fun startLoading() {
         view?.showLoading()
-        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
+        //        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
         subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
     }
 
