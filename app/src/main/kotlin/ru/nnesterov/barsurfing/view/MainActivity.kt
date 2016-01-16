@@ -19,7 +19,8 @@ import ru.nnesterov.barsurfing.domain.places.Route
 import ru.nnesterov.barsurfing.domain.places.RoutedPlaces
 
 class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
-
+    private val routeLIneWidth = 20.0f
+    private val hideAnimationDuration = 200L
     private var map: GoogleMap? = null
     private val markerBoundPadding = 100;
     private lateinit var progressBar: ProgressBar
@@ -93,11 +94,11 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     }
 
     override fun hideAbout() {
-        aboutOverlay.visibility = View.INVISIBLE
+        startHideAnimation(aboutOverlay)
     }
 
     override fun hideError() {
-        errorOverlay.visibility = View.INVISIBLE
+        startHideAnimation(errorOverlay)
     }
 
     private fun addMarkers(places: List<Place>) {
@@ -114,11 +115,19 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         map?.animateCamera(cameraUpdate)
     }
 
+    private fun startHideAnimation(view: View) {
+        view.animate()
+                .alpha(0.0f)
+                .withEndAction { view.visibility = View.INVISIBLE }
+                .setDuration(hideAnimationDuration)
+                .start()
+    }
+
     private fun addPolyline(route: Route) {
         val polyline = PolylineOptions()
                 .addAll(route.points)
                 .color(R.color.colorPrimaryDark)
-                .width(20.0f)
+                .width(routeLIneWidth)
         map?.addPolyline(polyline)
     }
 
