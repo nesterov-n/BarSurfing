@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="overlayTextView">
+        <item name="android:background">@color/colorOverlay</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorOverlayText</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
 </resources>

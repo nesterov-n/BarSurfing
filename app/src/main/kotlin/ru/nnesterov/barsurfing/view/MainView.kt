@@ -11,11 +11,14 @@ interface MainView {
 
     fun showLoading()
 
-    fun showError(ex: Throwable?)
+    fun showError(errorText: String)
 
     fun showAboutOverlay()
 
     fun clear()
 
-    fun hideAboutOverlay()
+    fun hideAbout()
+
+    fun hideError()
+
 }

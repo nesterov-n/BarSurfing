@@ -13,9 +13,11 @@ interface MainActivityPresenter {
 
     fun onDestroy()
 
-    fun onSaveinstanceState(state: Bundle)
+    fun onSaveInstanceState(state: Bundle)
 
     fun onMapFullReady()
 
     fun onAboutOverlayClicked()
+
+    fun onErrorOverlayClicked()
 }

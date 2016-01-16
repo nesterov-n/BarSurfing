@@ -2,10 +2,9 @@ package ru.nnesterov.barsurfing.view
 
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.TextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,6 +24,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     private val markerBoundPadding = 100;
     private lateinit var progressBar: ProgressBar
     private lateinit var aboutOverlay: View
+    private lateinit var errorOverlay: TextView
     private var presenter: MainActivityPresenter? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +35,18 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         mapFragment.getMapAsync(this)
 
         progressBar = findViewById(R.id.progress_bar) as ProgressBar
-        aboutOverlay = findViewById(R.id.overlay_view) as View
+        aboutOverlay = findViewById(R.id.overlay_about) as View
+        errorOverlay = findViewById(R.id.overlay_error) as TextView
 
         presenter = MainActivityPresenterImpl(this)
         presenter?.onCreate(this, savedInstanceState)
 
         aboutOverlay.setOnClickListener {
             presenter?.onAboutOverlayClicked()
+        }
+
+        errorOverlay.setOnClickListener {
+            presenter?.onErrorOverlayClicked()
         }
     }
 
@@ -66,7 +71,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        presenter?.onSaveinstanceState(outState!!)
+        presenter?.onSaveInstanceState(outState!!)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -87,8 +92,12 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         aboutOverlay.visibility = View.VISIBLE
     }
 
-    override fun hideAboutOverlay() {
+    override fun hideAbout() {
         aboutOverlay.visibility = View.INVISIBLE
+    }
+
+    override fun hideError() {
+        errorOverlay.visibility = View.INVISIBLE
     }
 
     private fun addMarkers(places: List<Place>) {
@@ -117,10 +126,11 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         progressBar.visibility = View.VISIBLE
     }
 
-    override fun showError(ex: Throwable?) {
+    override fun showError(errorText: String) {
         progressBar.visibility = View.INVISIBLE
-        Toast.makeText(this, ex?.toString() ?: "Unknown error", Toast.LENGTH_SHORT).show()
-        Log.e("MainActivity", "", ex)
+        aboutOverlay.visibility = View.INVISIBLE
+        errorOverlay.visibility = View.VISIBLE
+        errorOverlay.text = errorText
     }
 
     override fun clear() {
@@ -128,6 +138,6 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     }
 
     override fun showCurrentLocation(latitude: Double, longitude: Double) {
-        Log.d("MainActivity", "current location update")
+        // do nothing
     }
 }

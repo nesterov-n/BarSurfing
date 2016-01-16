@@ -3,6 +3,8 @@ package ru.nnesterov.barsurfing.view
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
+import ru.nnesterov.barsurfing.R
 import ru.nnesterov.barsurfing.domain.location.LocationInteractor
 import ru.nnesterov.barsurfing.domain.places.BarListInteractor
 import ru.nnesterov.barsurfing.domain.places.RoutedPlaces
@@ -52,53 +54,60 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
     }
 
     override fun onMapFullReady() {
-        view?.showLoading()
         if (routedPLaces == null) {
-            subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
-            subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
+            startLoading()
         } else {
+            view?.showLoading()
             view?.showPlaces(routedPLaces!!)
         }
     }
 
-    override fun onAboutOverlayClicked() {
-        view?.hideAboutOverlay()
+    private fun startLoading() {
+        view?.showLoading()
+        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
+        subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
     }
 
-    override fun onSaveinstanceState(state: Bundle) {
+    override fun onAboutOverlayClicked() {
+        view?.hideAbout()
+    }
+
+    override fun onErrorOverlayClicked() {
+        view?.hideError()
+        startLoading()
+    }
+
+    override fun onSaveInstanceState(state: Bundle) {
         if (routedPLaces != null) {
             val serializablaeWrapper = RoutedPlacesWrapper(routedPLaces!!)
             state.putSerializable(ROUTE_KEY, serializablaeWrapper)
         }
     }
 
-    private inner class LocationSubscriber : Subscriber<Location>() {
-        override fun onNext(t: Location?) {
-            val location = t ?: return;
-            view?.showCurrentLocation(location.latitude, location.longitude);
-        }
+    private abstract inner class BaseSubscriber<T> : Subscriber<T>() {
+        override abstract fun onNext(t: T)
 
         override fun onError(e: Throwable?) {
-            view?.showError(e);
-        }
-
-        override fun onCompleted() {
-            unsubscribe();
-        }
-    }
-
-    private inner class PlacesSubscriber : Subscriber<RoutedPlaces>() {
-        override fun onNext(places: RoutedPlaces) {
-            routedPLaces = places
-            view?.showPlaces(places)
-        }
-
-        override fun onError(e: Throwable) {
-            view?.showError(e);
+            Log.e("MainActivityPresenterImpl", "", e)
+            val errorText = context.getString(R.string.network_error)
+            view?.showError(errorText)
         }
 
         override fun onCompleted() {
             unsubscribe()
+        }
+    }
+
+    private inner class LocationSubscriber : BaseSubscriber<Location>() {
+        override fun onNext(location: Location) {
+            view?.showCurrentLocation(location.latitude, location.longitude);
+        }
+    }
+
+    private inner class PlacesSubscriber : BaseSubscriber<RoutedPlaces>() {
+        override fun onNext(places: RoutedPlaces) {
+            routedPLaces = places
+            view?.showPlaces(places)
         }
     }
 }
