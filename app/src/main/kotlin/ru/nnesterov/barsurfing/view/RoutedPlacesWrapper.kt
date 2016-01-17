@@ -14,9 +14,11 @@ internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
 
     private val serializationUUID: Long = 248L
 
-    private val internalPlaces = ArrayList<InternalPlace>();
+    private val internalPlaces = ArrayList<InternalPlace>()
 
     private val internalRoutePoints = ArrayList<InternalPoint>()
+
+    private var distance = 0
 
     init {
         routedPlaces.route.points.forEach {
@@ -29,6 +31,8 @@ internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
                     InternalPoint(it.latitude, it.longitude),
                     it.visited))
         }
+
+        distance = routedPlaces.route.distanceMeters
     }
 
     internal fun toRoutedPlaces(): RoutedPlaces {
@@ -48,7 +52,7 @@ internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
                     it.longitude))
         }
 
-        return RoutedPlaces(places, Route(routePoints))
+        return RoutedPlaces(places, Route(routePoints, distance))
     }
 
     private data class InternalPoint(val latitude: Double,

@@ -8,6 +8,11 @@ import java.util.*
 internal object RouteMapper : Func1<RouteDto, Route> {
     override fun call(dto: RouteDto?): Route? {
         val encodedRoute = dto?.polyline?.points ?: ""
-        return Route(PolyUtil.decode(encodedRoute) ?: Collections.emptyList())
+        val points = PolyUtil.decode(encodedRoute) ?: Collections.emptyList()
+        val distance = dto?.legs?.fold(0) {
+            totalDistance, leg ->
+            totalDistance + (leg.distance?.value ?: 0)
+        } ?: 0
+        return Route(points, distance)
     }
 }

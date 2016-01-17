@@ -13,7 +13,7 @@ internal interface PlacesApi {
                   @Query("opennow") openNow: Boolean,
                   @Query("key") key: String): Observable<PlacesResponseDto>
 
-    @GET("/directions/json")
+    @GET("/directions/json?unit=metric")
     fun getRoute(@Query("origin") origin: String,
                  @Query("destination") destination: String,
                  @Query("waypoints") via: String,

@@ -29,6 +29,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     private lateinit var progressBar: ProgressBar
     private lateinit var aboutOverlay: View
     private lateinit var errorOverlay: TextView
+    private lateinit var routeInfo: TextView
     private var presenter: MainActivityPresenter? = null;
     private val markerMap = HashMap<String, Place>();
 
@@ -42,6 +43,7 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         progressBar = findViewById(R.id.progress_bar) as ProgressBar
         aboutOverlay = findViewById(R.id.overlay_about) as View
         errorOverlay = findViewById(R.id.overlay_error) as TextView
+        routeInfo = findViewById(R.id.route_info_view) as TextView
 
         presenter = MainActivityPresenterImpl(this)
         presenter?.onCreate(this, savedInstanceState)
@@ -96,8 +98,8 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         clear();
         addMarkers(places.places)
         addPolyline(places.route)
+        showRouteInfo(places)
     }
-
 
     override fun showAboutOverlay() {
         aboutOverlay.visibility = View.VISIBLE
@@ -134,6 +136,15 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
         map?.animateCamera(cameraUpdate)
     }
 
+    private fun showRouteInfo(routedPlaces: RoutedPlaces) {
+        val barCount = resources.getQuantityString(R.plurals.bar_count, routedPlaces.places.size, routedPlaces.places.size)
+        val distance = routedPlaces.route.distanceMeters / 1000.0
+
+        val info = getString(R.string.route_info, barCount, distance)
+        routeInfo.visibility = View.VISIBLE
+        routeInfo.text = info
+    }
+
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
         super.onSaveInstanceState(outState, outPersistentState)
     }
@@ -155,11 +166,13 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
     }
 
     override fun showLoading() {
+        routeInfo.visibility = View.INVISIBLE
         progressBar.visibility = View.VISIBLE
     }
 
     override fun showError(errorText: String) {
         progressBar.visibility = View.INVISIBLE
+        routeInfo.visibility = View.INVISIBLE
         aboutOverlay.visibility = View.INVISIBLE
         errorOverlay.visibility = View.VISIBLE
         errorOverlay.text = errorText
