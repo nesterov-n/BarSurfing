@@ -66,6 +66,10 @@ internal class PlaceResultDto {
     @Expose
     var reference: String? = null
 
+    @SerializedName("vicinity")
+    @Expose
+    var vicinity: String? = null
+
 }
 
 internal class PlacesResponseDto {

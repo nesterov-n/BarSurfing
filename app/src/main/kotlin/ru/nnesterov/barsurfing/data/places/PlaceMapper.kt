@@ -12,6 +12,7 @@ internal object PlaceMapper : Func1<PlacesResponseDto, List<Place>> {
         response.results.forEach {
             result.add(Place(it.placeId ?: "",
                     it.name ?: "",
+                    it.vicinity ?: "",
                     it.geometry?.location?.lat ?: 0.0,
                     it.geometry?.location?.lng ?: 0.0
             ))

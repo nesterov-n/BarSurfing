@@ -195,9 +195,11 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
             val infoView = LayoutInflater.from(this@MainActivity).inflate(R.layout.info_window, null);
             val titleView = infoView.findViewById(R.id.info_window_title) as TextView
             val visitedView = infoView.findViewById(R.id.info_window_visited_button) as CheckBox
+            val addressView = infoView.findViewById(R.id.info_window_address) as TextView
 
             titleView.text = place.name
             visitedView.isChecked = place.visited
+            addressView.text = place.address
 
             return infoView
         }

@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:padding="12dp"
         android:textColor="@color/blackText"
-        android:textSize="14sp"
+        android:textSize="@dimen/smallText"
         android:visibility="invisible" />
 
     <ProgressBar
