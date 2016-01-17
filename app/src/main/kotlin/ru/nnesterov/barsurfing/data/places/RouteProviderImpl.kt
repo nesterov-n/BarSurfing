@@ -15,7 +15,7 @@ class RouteProviderImpl(context: Context) : RouteProvider {
     // TODO: DI
     private val placesApi = RestAdapter.Builder()
             .setEndpoint("https://maps.googleapis.com/maps/api")
-            .setLogLevel(RestAdapter.LogLevel.FULL)
+            .setLogLevel(RestAdapter.LogLevel.NONE)
             .build()
             .create(PlacesApi::class.java);
 

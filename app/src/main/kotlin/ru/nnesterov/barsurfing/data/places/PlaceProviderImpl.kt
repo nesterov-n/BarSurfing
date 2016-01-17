@@ -13,7 +13,7 @@ import rx.Observable
 public class PlaceProviderImpl(private val context: Context) : PlaceProvider {
     private val placesApi = RestAdapter.Builder()
             .setEndpoint("https://maps.googleapis.com/maps/api")
-            .setLogLevel(RestAdapter.LogLevel.FULL)
+            .setLogLevel(RestAdapter.LogLevel.NONE)
             .build()
             .create(PlacesApi::class.java);
 
