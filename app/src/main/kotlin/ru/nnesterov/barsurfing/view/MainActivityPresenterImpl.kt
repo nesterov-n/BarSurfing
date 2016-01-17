@@ -21,7 +21,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
     private val locationInteractor: LocationInteractor;
     private var view: MainView? = null;
     private val subscriptions = ArrayList<Subscription>()
-    private var routedPLaces: RoutedPlaces? = null
+    private var routedPlaces: RoutedPlaces? = null
 
     init {
         barListInteractor = BarListInteractor(context)
@@ -32,7 +32,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
         this.view = view
         val wrapper = savedState?.getSerializable(ROUTE_KEY) as RoutedPlacesWrapper?
         if (wrapper != null) {
-            routedPLaces = wrapper.toRoutedPlaces()
+            routedPlaces = wrapper.toRoutedPlaces()
         }
         if (savedState == null) {
             view.showAboutOverlay()
@@ -54,18 +54,30 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
     }
 
     override fun onMapFullReady() {
-        if (routedPLaces == null) {
+        if (routedPlaces == null) {
             startLoading()
         } else {
             view?.showLoading()
-            view?.showPlaces(routedPLaces!!)
+            view?.showPlaces(routedPlaces!!)
         }
     }
 
-    private fun startLoading() {
-        view?.showLoading()
-        //        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
-        subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
+    override fun onPlaceVisitedChanged(placeId: String) {
+        if (routedPlaces?.places == null) {
+            return
+        }
+        var hasChanges = false;
+
+        routedPlaces?.places?.forEach {
+            if (it.id == placeId) {
+                it.visited = !it.visited
+                hasChanges = true;
+            }
+        }
+
+        if (hasChanges) {
+            view?.showPlaces(routedPlaces!!)
+        }
     }
 
     override fun onAboutOverlayClicked() {
@@ -78,10 +90,16 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
     }
 
     override fun onSaveInstanceState(state: Bundle) {
-        if (routedPLaces != null) {
-            val serializablaeWrapper = RoutedPlacesWrapper(routedPLaces!!)
+        if (routedPlaces != null) {
+            val serializablaeWrapper = RoutedPlacesWrapper(routedPlaces!!)
             state.putSerializable(ROUTE_KEY, serializablaeWrapper)
         }
+    }
+
+    private fun startLoading() {
+        view?.showLoading()
+        //        subscriptions.add(locationInteractor.subscribeToLocation(LocationSubscriber()));
+        subscriptions.add(barListInteractor.getNearbyBars(PlacesSubscriber()));
     }
 
     private abstract inner class BaseSubscriber<T> : Subscriber<T>() {
@@ -106,7 +124,7 @@ class MainActivityPresenterImpl(private val  context: Context) : MainActivityPre
 
     private inner class PlacesSubscriber : BaseSubscriber<RoutedPlaces>() {
         override fun onNext(places: RoutedPlaces) {
-            routedPLaces = places
+            routedPlaces = places
             view?.showPlaces(places)
         }
     }

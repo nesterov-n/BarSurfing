@@ -8,7 +8,7 @@ import java.io.Serializable
 import java.util.*
 
 /**
- *  Hacke class to encapsulate serialization problems
+ *  Hacky class to encapsulate serialization problems
  */
 internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
 
@@ -26,7 +26,8 @@ internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
         routedPlaces.places.forEach {
             internalPlaces.add(InternalPlace(it.id,
                     it.name,
-                    InternalPoint(it.latitude, it.longitude)))
+                    InternalPoint(it.latitude, it.longitude),
+                    it.visited))
         }
     }
 
@@ -36,7 +37,8 @@ internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
             places.add(Place(it.id,
                     it.name,
                     it.location.latitude,
-                    it.location.longitude
+                    it.location.longitude,
+                    it.visited
             ))
         }
 
@@ -56,10 +58,10 @@ internal class RoutedPlacesWrapper(routedPlaces: RoutedPlaces) : Serializable {
 
     private data class InternalPlace(val id: String,
                                      val name: String,
-                                     val location: InternalPoint) : Serializable {
+                                     val location: InternalPoint,
+                                     val visited: Boolean) : Serializable {
         private val serializationUUID: Long = 250L
     }
-
 
 }
 

@@ -17,7 +17,10 @@ interface MainActivityPresenter {
 
     fun onMapFullReady()
 
+    fun onPlaceVisitedChanged(placeId: String)
+
     fun onAboutOverlayClicked()
 
     fun onErrorOverlayClicked()
+
 }
