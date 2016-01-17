@@ -1,8 +1,10 @@
 package ru.nnesterov.barsurfing.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.app.FragmentActivity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
@@ -184,6 +186,18 @@ class MainActivity : FragmentActivity(), OnMapReadyCallback, MainView {
 
     override fun showCurrentLocation(latitude: Double, longitude: Double) {
         // do nothing
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder(this)
+                    .setMessage(R.string.exit_confirmation)
+                    .setPositiveButton(android.R.string.ok, { dialog, which -> this@MainActivity.finish() })
+                    .setNegativeButton(android.R.string.cancel, { dialog, which -> dialog?.dismiss() })
+                    .show()
+            return true;
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     private inner class InfoWindowAdapter : GoogleMap.InfoWindowAdapter {

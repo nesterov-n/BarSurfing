@@ -6,6 +6,7 @@
     <string name="network_error">There is problem with connection</string>
     <string name="unknown_error">Unknown error</string>
     <string name="route_info">%1$s\n%2$.1f km</string>
+    <string name="exit_confirmation">Do you want to close app? Your route will be erased.</string>
     <plurals name="bar_count">
         <item quantity="one">%1$s bar</item>
         <item quantity="other">%1$s bars</item>
