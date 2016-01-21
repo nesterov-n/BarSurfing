@@ -6,7 +6,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "barsurfing.nnesterov.ru.barsurfing"
+        applicationId "ru.nnesterov.barsurfing"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
